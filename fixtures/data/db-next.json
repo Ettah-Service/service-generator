@@ -1,0 +1,7 @@
+{
+  "PartitionId": "user@email.com",
+  "SortKey": "uuidInTimeStrong",
+  "FirstProperty": "NameFirst",
+  "LastProperty": "NameLast",
+  "IsActive": true
+}

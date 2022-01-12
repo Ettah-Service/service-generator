@@ -1,0 +1,52 @@
+  config:
+    handler: router.endpointRoute
+    environment:
+      ROUTE_KEY: getConfigRouterHandler
+    events:
+      - http:
+          path: /service/config
+          method: get
+          cors: true
+          private: true
+
+  create:
+    handler: router.endpointRoute
+    environment:
+      ROUTE_KEY: createModel
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+          private: true
+
+  get:
+    handler: router.endpointRoute
+    environment:
+      ROUTE_KEY: getModel
+    events:
+      - http:
+          path: /{partitionId}/{sortKey}
+          method: get
+          cors: true
+          private: true
+  update:
+    handler: router.endpointRoute
+    environment:
+      ROUTE_KEY: updateModel
+    events:
+      - http:
+          path: /{partitionId}/{sortKey}
+          method: post
+          cors: true
+          private: true
+  list:
+    handler: router.endpointRoute
+    environment:
+      ROUTE_KEY: listModel
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
+          private: true

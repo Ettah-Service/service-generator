@@ -1,0 +1,11 @@
+{
+  "pathParameters": {
+    "partitionId": "xxxx",
+    "sortKey": "yyyy"
+  },
+  "body": [{
+    "fieldName": "firstProperty",
+    "remove": false,
+    "replace": "anotherProperty"
+  }]
+}

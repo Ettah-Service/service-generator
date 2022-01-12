@@ -1,0 +1,22 @@
+[
+  {
+    "db:next": "PartitionId",
+    "model": "partitionId"
+  },
+  {
+    "db:next": "SortKey",
+    "model": "sortKey"
+  },
+  {
+    "db:next": "FirstProperty",
+    "model": "firstProperty"
+  },
+  {
+    "db:next": "LastProperty",
+    "model": "lastProperty"
+  },
+  {
+    "db:next": "IsActive",
+    "model": "isActive"
+  }
+]

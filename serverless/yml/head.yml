@@ -1,0 +1,37 @@
+service:
+  name: mkn-service
+
+plugins:
+  - serverless-deployment-bucket
+  - serverless-webpack
+  - serverless-dotenv-plugin
+  - serverless-offline
+  - serverless-add-api-key
+
+custom:
+  tagName: ${self:service.name}-${env.CI_BRANCH, opt:stage, 'dev'}
+  apiKeys:
+    - name: service-api-authentication-key
+      value: ${ssm:/alfa/users/api-service/authentication-key~true}
+  longRunningFxnTimeout: 300
+  apiGatewayFxnTimeout: 29
+  logRetentionInDays: 5
+  maxPreviousDeploymentArtifacts: 2
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  stackName: ${self:custom.tagName}
+  apiName: ${self:custom.tagName}
+  deploymentBucket:
+    name: com.alfa.users.tech.${self:provider.region}.deploys
+    maxPreviousDeploymentArtifacts: ${self:custom.maxPreviousDeploymentArtifacts}
+    blockPublicAccess: true
+    serverSideEncryption: AES256
+    tags:
+      serviceName: ${self:service.name}
+      feature: ${self:custom.tagName}
+  logRetentionInDays: ${self:custom.logRetentionInDays}
+  timeout: ${self:custom.apiGatewayFxnTimeout}

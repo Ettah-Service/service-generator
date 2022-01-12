@@ -1,0 +1,16 @@
+version: '3'
+services:
+  dynamodb:
+    image: amazon/dynamodb-local
+    ports:
+      - "9119:8000"
+  s3:
+    image: minio/minio
+    ports:
+      - "9020:9000"
+    volumes:
+      - "./tmp:/home"
+    environment:
+      - "MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE"
+      - "MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    command: server /home

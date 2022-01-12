@@ -1,0 +1,62 @@
+{
+  "name": "mkn-service",
+  "version": "1.0.0",
+  "description": "Start up with a new serverless service",
+  "scripts": {
+    "pretest": "yarn lint",
+    "test": "nyc --reporter=html --reporter=text ava",
+    "lint": "npx standard",
+    "hello": "npx babel-node ./.scripts/hello-task.js",
+    "setup:ssm": "babel-node -r dotenv/config ./.scripts/setup-ssm.js dotenv_config_path=./.env.local",
+    "setup:dynamodb": "babel-node -r dotenv/config ./.scripts/setup-dynamodb.js dotenv_config_path=./.env.local",
+    "generate:yml": "cat serverless/yml/head.yml serverless/yml/env/local.yml serverless/yml/api.yml serverless/yml/tail.yml > serverless.yml",
+    "generate:yml:prod": "cat serverless/yml/head.yml serverless/yml/env/prod.yml serverless/yml/api.yml serverless/yml/tail.yml > serverless.yml",
+    "upload:template": "babel-node -r dotenv/config ./.scripts/upload-template.js dotenv_config_path=./.env.local",
+    "prepare": "husky install"
+  },
+  "main": "index.js",
+  "engines": {
+    "npm": "7",
+    "node": "14"
+  },
+  "repository": "https://github.com/alfa-users/mkn-service.git",
+  "author": "Rubin Apore <rubin.apore@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.11.4",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "ava": "^3.15.0",
+    "babel-plugin-source-map-support": "^2.1.2",
+    "husky": "^7.0.0",
+    "husky-run": "^0.0.0",
+    "nyc": "^15.1.0",
+    "serverless-add-api-key": "^4.1.1",
+    "serverless-deployment-bucket": "^1.5.1",
+    "serverless-dotenv-plugin": "^3.10.0",
+    "serverless-offline": "^8.2.0",
+    "serverless-pseudo-parameters": "^2.6.1",
+    "serverless-webpack": "^5.5.4",
+    "webpack": "^4.44.0"
+  },
+  "standard": {
+    "ignore": [
+      "**/**.md",
+      "**/**.snap"
+    ]
+  },
+  "dependencies": {
+    "@babel/register": "^7.10.5",
+    "@hapi/boom": "^9.1.0",
+    "@meltwater/phi": "^3.8.0",
+    "awaiting": "^3.0.0",
+    "awilix": "^4.3.1",
+    "axios": "^0.21.1",
+    "axios-retry": "^3.1.9",
+    "babel-loader": "^8.1.0",
+    "big-integer": "^1.6.48",
+    "flatten-dir": "^1.0.1",
+    "source-map-support": "^0.5.19"
+  }
+}

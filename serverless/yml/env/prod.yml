@@ -1,0 +1,7 @@
+  environment:
+    ENV: ${ssm:/alfa/users/mkn-service/production/env~true}
+    DEBUG: ${ssm:/alfa/users/mkn-service/production/debug~true}
+    DOMAIN: ${ssm:/alfa/users/mkn-service/production/domain~true}
+    ENDPOINT: ${ssm:/alfa/users/mkn-service/production/endpoint~true}
+    API_KEY: ${ssm:/alfa/users/api-service/authentication-key~true}
+functions:
