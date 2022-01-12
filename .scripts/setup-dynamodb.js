@@ -1,39 +1,32 @@
 #!/usr/bin/env node
+import { tap, split, length, values, compose, trim, toString, fromJson, path } from '@meltwater/phi'
 import { inspect } from 'util'
-import { tap, compose, toString, length, filter, includes, fromJson } from '@meltwater/phi'
-import flattenDir from 'flatten-dir'
-import { readFileSync } from 'fs'
 import { resolve } from 'path'
 import { map as mapAwait } from 'awaiting'
+import { readFileSync } from 'fs'
 import config from '../config'
-import createDynamodbClient from '../lib/util/client/dynamodb'
+import createDynamodbClient  from '../lib/util/client/dynamodb'
 
-const getSchemaJson = compose(fromJson, toString, readFileSync)
-const createGetFileContent = () => fileName => ({ fileName, schema: getSchemaJson(fileName) })
-const createDynamodbDatabase = dynamoClient => async ({
-  fileName,
-  schema
-}) => ({
-  fileName,
-  result: await (dynamoClient.createTable(schema).promise())
-})
-
+const tp = split('.')
+const getSchema = compose(fromJson, trim, toString, readFileSync)
 const runner = async () => {
-  const { s3: { bucket: bucketName } } = config
+  const tables = values(path(tp('dynamodb.table'), config))
+  const seedingEnabled = path(tp('dynamodb.seedingEnabled'), config)
   const dynamoClient = createDynamodbClient({ config })
-  const dirName = resolve(process.cwd(), 'fixtures')
-  const allFiles = await flattenDir(dirName)
-  const files = filter(includes('/db/schema/'), allFiles)
-  const result = await mapAwait(
-    files,
-    length(files),
-    compose(createDynamodbDatabase(dynamoClient), createGetFileContent(dirName)))
-  return ({
-    service: 'Upload:Template',
-    task: 'Create all dynamodb tables',
-    meta: { bucketName, result }
+  await mapAwait(tables, length(tables), async tableName => {
+    const schemaPath = resolve(`${process.cwd()}/fixtures/db/schema/${tableName}.json`)
+    const schema = getSchema(schemaPath)
+    await dynamoClient.createTable(schema).promise()
   })
+  return {
+    serviceName: 'Dyanmodb',
+    meta: {
+      tables,
+      seedingEnabled
+    }
+  }
 }
+
 Promise.resolve()
   .then(() => console.time('Setting up dynamodb'))
   .then(runner)
